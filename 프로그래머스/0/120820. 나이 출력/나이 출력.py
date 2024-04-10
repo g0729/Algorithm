@@ -1,2 +1,1 @@
-def solution(age):
-    return 2023-age
+solution=lambda x : 2023-x
