@@ -1,8 +1,11 @@
+import sys
+
+input = sys.stdin.readline
+
 MOD = 1000000007
 n = int(input())
 v = list(map(int, input().split()))
 v.sort(reverse=True)
-
 sum = v[0]
 
 for i in range(1, n):
