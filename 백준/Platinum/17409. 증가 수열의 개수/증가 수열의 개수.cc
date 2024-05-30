@@ -5,7 +5,7 @@ using namespace std;
 #define MOD 1000000007
 #define MAX 100000
 
-vector<vector<ll>> tree(51, vector<ll>(4 * (MAX + 1)));
+vector<vector<ll>> tree(11, vector<ll>(4 * (MAX + 1)));
 vector<ll> v(MAX);
 ll update(int start, int end, int node, int idx, int val, int num)
 {
