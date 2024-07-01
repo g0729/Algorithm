@@ -1,53 +1,68 @@
-#include <bits/stdc++.h>
-
-#define endl '\n'
-typedef long long ll;
-#define setting cin.tie(0)->sync_with_stdio(0)
+#include <iostream>
+#include <queue>
 using namespace std;
 
+int dx[] = {-2, -2, -1, -1, 1, 1, 2, 2};
+int dy[] = {1, -1, 2, -2, 2, -2, 1, -1};
 
-int main(){
-  setting;
+int mat[300][300];
+bool visited[300][300];
 
-  int tc;
-  cin >> tc;
+int main()
+{
+    queue<pair<int, int>> q; // 페어 큐 쓰는거 익숙해져야할듯
+    int n, testcase, x, y, ex, ey;
+    cin >> testcase;
 
-  while(tc--){
-    int l;
-    cin >> l;
+    while (testcase--)
+    {
 
-    int tx, ty;
-    cin >> tx >> ty;
-    int x, y;
-    cin >> x >> y;
+        cin >> n;
+        cin >> x >> y;
+        cin >> ex >> ey;
 
-    queue<pair<int, pair<int, int>>> q;
+        visited[x][y] = true;
+        mat[x][y] = 0;
+        mat[ex][ey] = 0;
+        q.push(make_pair(x, y));
 
-    q.push({0, {tx, ty}});
+        while (!q.empty())
+        {
+            x = q.front().first;
+            y = q.front().second;
+            q.pop();
 
-    bool visited[l][l];
+            for (int i = 0; i < 8; i++)
+            {
+                if (x + dx[i] >= 0 && x + dx[i] < n && y + dy[i] >= 0 && y + dy[i] < n)
+                {
+                    if (!visited[x + dx[i]][y + dy[i]])
+                    {
+                        mat[x + dx[i]][y + dy[i]] = mat[x][y] + 1;
+                        visited[x + dx[i]][y + dy[i]] = 1;
+                        // cout<<x+dx[i]<<" ,"<<y+dy[i]<<'='<<mat[x+dx[i]][y+dy[i]]<<" "<<x<<y<<endl;
+                        q.push(make_pair(x + dx[i], y + dy[i]));
+                    }
+                }
+            }
 
-    memset(visited,false,sizeof(visited));
-
-    int df[8][2] = {{1, 2}, {-1, 2}, {2, 1}, {2, -1}, {1, -2}, {-1, -2}, {-2, -1}, {-2, 1}};
-
-    while(!q.empty()){
-      pair<int, int> xy = q.front().second;
-      int cnt = q.front().first;
-      q.pop();
-      if (xy.first == x && xy.second == y){
-        cout << cnt << endl;
-        break ;
-      }
-      for (int i = 0; i < 8; ++i) {
-        int nx = xy.first + df[i][0];
-        int ny = xy.second + df[i][1];
-
-        if (nx >= 0 && nx < l && ny >= 0 && ny < l && !visited[nx][ny]){
-          visited[nx][ny] = true;
-          q.push({cnt + 1, {nx, ny}});
+            if (mat[ex][ey] != 0)
+            {
+                cout << mat[ex][ey] << "\n";
+                break;
+            }
         }
-      }
+        if (mat[ex][ey] == 0)
+        {
+            cout << mat[ex][ey] << "\n";
+        }
+        fill(visited[0], visited[300], false);
+        fill(mat[0], mat[300], 0);
+        // memset(visited, false, sizeof(visited));
+        // memset(mat, 0, sizeof(mat));
+        while (!q.empty())
+            q.pop();
     }
-  }
+
+    return 0;
 }
