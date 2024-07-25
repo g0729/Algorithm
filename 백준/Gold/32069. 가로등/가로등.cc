@@ -6,7 +6,7 @@ using namespace std;
 #define INF 987654321
 ll n, l, k;
 vector<ll> v;
-int dx[] = {1, -1};
+ll dx[] = {1, -1};
 void bfs()
 {
     queue<ll> q;
@@ -30,7 +30,7 @@ void bfs()
 
             for (int i = 0; i < 2; i++)
             {
-                int next = now + dx[i];
+                ll next = now + dx[i];
 
                 if (next < 0 || next > l)
                     continue;
