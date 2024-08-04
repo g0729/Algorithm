@@ -1,16 +1,14 @@
-N, M = map(int, input().split())
-A = [list(map(int, input().split())) for _ in range(N)]
+n, m = map(int, input().split())
+a = [list(map(int, input().split())) for _ in range(n)]
+m, k = map(int, input().split())
+b = [list(map(int, input().split())) for _ in range(m)]
 
-M, K = map(int, input().split())
-B = [list(map(int, input().split())) for _ in range(M)]
+c = [[0] * k for _ in range(n)]
 
-AxB = [[0]*K for _ in range(N)]
-for row in range(N):
-    for col in range(K):
-        e = 0
-        for i in range(M):
-            e += A[row][i] * B[i][col]
-        AxB[row][col] = e
+for i in range(n):
+    for j in range(k):
+        for p in range(m):
+            c[i][j] += a[i][p] * b[p][j]
 
-for r in AxB:
+for r in c:
     print(*r)
