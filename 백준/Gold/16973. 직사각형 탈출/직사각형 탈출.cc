@@ -14,7 +14,7 @@ int dy[] = {0, 0, 1, -1};
 
 bool isAccept(int x1, int y1, int x2, int y2)
 {
-    int blocks = blocks = acc_sum[x2][y2] - acc_sum[x2][y1 - 1] - acc_sum[x1 - 1][y2] + acc_sum[x1 - 1][y1 - 1];
+    int blocks = acc_sum[x2][y2] - acc_sum[x2][y1 - 1] - acc_sum[x1 - 1][y2] + acc_sum[x1 - 1][y1 - 1];
     return blocks == 0;
 }
 bool isBorder(int x, int y)
