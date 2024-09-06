@@ -2,7 +2,7 @@
 using namespace std;
 #define ll long long
 #define MOD 1000000007
-#define MAX 100000
+#define MAX 100010
 #define INF 987654321
 
 vector<pair<int, int>> edge[MAX + 1];
