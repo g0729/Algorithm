@@ -1,3 +1,8 @@
+import sys
+
+input = sys.stdin.readline
+print = sys.stdout.write
+
 r, s = map(int, input().split())
 MAP = [list(input()) for _ in range(r)]
 
@@ -23,4 +28,4 @@ for i in range(r):
             res[i][j] = "#"
 
 for a in res:
-    print("".join(a))
+    print("".join(a) + "\n")
