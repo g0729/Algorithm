@@ -1,0 +1,9 @@
+SELECT B.ID
+    ,B.EMAIL
+    ,B.FIRST_NAME
+    ,B.LAST_NAME
+FROM DEVELOPERS B,(SELECT SUM(CODE) AS CODE
+                FROM SKILLCODES
+                WHERE NAME IN ("C#","Python")) as R 
+WHERE (R.CODE & B.SKILL_CODE) != 0
+ORDER BY B.ID
