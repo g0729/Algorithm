@@ -1,0 +1,32 @@
+WITH TEMP AS (
+    SELECT
+        APNT_NO,
+        PT_NO,
+        MDDR_ID,
+        MCDP_CD,
+        APNT_YMD
+    FROM
+        APPOINTMENT
+    WHERE
+        APNT_YMD LIKE "2022-04-13%" AND APNT_CNCL_YN = "N" AND MCDP_CD = "CS"
+)
+
+SELECT
+    B.APNT_NO,
+    R.PT_NAME,
+    B.PT_NO,
+    B.MCDP_CD,
+    T.DR_NAME,
+    B.APNT_YMD
+FROM
+    TEMP B
+JOIN
+    PATIENT R
+ON
+    B.PT_NO = R.PT_NO
+JOIN
+    DOCTOR T
+ON
+    B.MDDR_ID = T. DR_ID
+ORDER BY
+    B.APNT_YMD
