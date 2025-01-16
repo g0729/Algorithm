@@ -1,0 +1,29 @@
+WITH FIRST_GENERATION AS(
+    SELECT
+        *
+    FROM
+        ECOLI_DATA
+    WHERE
+        PARENT_ID IS NULL
+)
+,SECOND_GENERATION AS(
+    SELECT
+        E.ID
+    FROM
+        ECOLI_DATA E
+    JOIN 
+        FIRST_GENERATION F
+    ON
+        E.PARENT_ID = F.ID
+)
+
+SELECT
+    E.ID
+FROM
+    ECOLI_DATA E
+JOIN
+    SECOND_GENERATION S
+ON
+    E.PARENT_ID = S.ID
+ORDER BY
+    E.ID
