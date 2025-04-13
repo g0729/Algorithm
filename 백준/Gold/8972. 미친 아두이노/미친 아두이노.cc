@@ -112,10 +112,8 @@ int main()
             return 0;
         }
     }
-    for (int i = 0; i < r; i++)
-    {
-        cout << MAP[i] << "\n";
-    }
+    for (auto it : MAP)
+        cout << it << "\n";
 
     return 0;
 }
