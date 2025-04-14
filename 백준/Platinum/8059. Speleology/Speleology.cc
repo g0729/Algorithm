@@ -1,11 +1,10 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <queue>
+#include <vector>
+#include <math.h>
 using namespace std;
-#define ll long long
-#define MOD 1000000007
 #define MAX 202
 #define INF 987654321
-int dx[] = {1, -1, 0, 0};
-int dy[] = {0, 0, 1, -1};
 int n;
 vector<vector<int>> edges(MAX), capacity(MAX, vector<int>(MAX)), flow(MAX, vector<int>(MAX));
 
