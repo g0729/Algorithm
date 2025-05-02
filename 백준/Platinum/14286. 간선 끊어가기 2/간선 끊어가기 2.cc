@@ -65,9 +65,14 @@ int mcmf()
         if (parent[sink].first == -1)
             break;
 
+        int min_flow = INF;
         for (int i = sink; i != source; i = parent[i].first)
-            parent[i].second->update(1);
-        res++;
+            min_flow = min(min_flow, parent[i].second->residual());
+
+        for (int i = sink; i != source; i = parent[i].first)
+            parent[i].second->update(min_flow);
+
+        res += min_flow;
     }
 
     return res;
