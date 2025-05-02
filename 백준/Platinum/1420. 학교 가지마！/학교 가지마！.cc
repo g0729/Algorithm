@@ -9,55 +9,48 @@ int dy[] = {-1, 1, 0, 0};
 
 struct Edge
 {
-    int to, capacity, flow;
-    Edge *reverse;
+    int next, capacity, flow;
+    Edge *rev;
 
-    Edge(int _to, int _cap, int _flow = 0) : to(_to), capacity(_cap) {}
+    Edge(int next, int capacity) : next(next), capacity(capacity) {};
 
-    int ResidualCapacity() const
+    int residual() { return capacity - flow; };
+    void update(int flow)
     {
-        return capacity - flow;
-    }
-
-    void PushFlow(int amount)
-    {
-        flow += amount;
-        reverse->flow -= amount;
+        this->flow += flow;
+        this->rev->flow -= flow;
     }
 };
-
-int row, column;
-int vertex_num;
-char city_map[100][100];
-vector<vector<Edge *>> adj;
-bool visited[100][100];
-int change_pos[4][2] = {{0, -1}, {0, 1}, {1, 0}, {-1, 0}};
+int n, m;
+vector<vector<Edge *>> edges(MAX, vector<Edge *>());
+int source = -1, sink = -1;
 void add_edge(int u_in, int u_out, int v_in, int v_out)
 {
     Edge *u_out_v_in = new Edge(v_in, INF);
     Edge *v_in_u_out = new Edge(u_out, 0); // 역 방향의 유령 간선
 
-    u_out_v_in->reverse = v_in_u_out;
-    v_in_u_out->reverse = u_out_v_in;
-    adj[u_out].push_back(u_out_v_in);
-    adj[v_in].push_back(v_in_u_out);
+    u_out_v_in->rev = v_in_u_out;
+    v_in_u_out->rev = u_out_v_in;
+    edges[u_out].push_back(u_out_v_in);
+    edges[v_in].push_back(v_in_u_out);
+
     Edge *v_out_u_in = new Edge(u_in, INF);
     Edge *u_in_v_out = new Edge(v_out, 0); // 역 방향의 유령 간선
 
-    v_out_u_in->reverse = u_in_v_out;
-    u_in_v_out->reverse = v_out_u_in;
-    adj[v_out].push_back(v_out_u_in);
-    adj[u_in].push_back(u_in_v_out);
+    v_out_u_in->rev = u_in_v_out;
+    u_in_v_out->rev = v_out_u_in;
+    edges[v_out].push_back(v_out_u_in);
+    edges[u_in].push_back(u_in_v_out);
 }
 
-int MinimumCut(int source, int sink)
+int mcmf()
 {
     int total_flow = 0;
 
     while (1)
     {
-        vector<int> parent(vertex_num, -1);
-        vector<Edge *> edge_to_child(vertex_num);
+        vector<int> parent(MAX, -1);
+        vector<Edge *> edge_to_child(MAX);
         queue<int> q;
         q.push(source);
         parent[source] = source;
@@ -67,11 +60,11 @@ int MinimumCut(int source, int sink)
             int u = q.front();
             q.pop();
 
-            for (int i = 0; i < adj[u].size(); ++i)
+            for (int i = 0; i < edges[u].size(); ++i)
             {
-                Edge *uv = adj[u][i];
-                int v = uv->to;
-                if (uv->ResidualCapacity() > 0 && parent[v] == -1)
+                Edge *uv = edges[u][i];
+                int v = uv->next;
+                if (uv->residual() > 0 && parent[v] == -1)
                 {
                     q.push(v);
                     parent[v] = u;
@@ -87,57 +80,37 @@ int MinimumCut(int source, int sink)
         for (int p = sink; p != source; p = parent[p])
         {
             Edge *parent_to_p = edge_to_child[p];
-            amount = min(amount, parent_to_p->ResidualCapacity());
+            amount = min(amount, parent_to_p->residual());
         }
 
         for (int p = sink; p != source; p = parent[p])
         {
             Edge *parent_to_p = edge_to_child[p];
-            parent_to_p->PushFlow(amount);
+            parent_to_p->update(amount);
         }
 
         total_flow += amount;
     }
     return total_flow;
 }
-
 int main()
 {
     ios_base::sync_with_stdio(0);
     cin.tie(0);
     cout.tie(0);
 
-    cin >> row >> column;
-
-    vertex_num = row * column * 2;
-
-    adj = vector<vector<Edge *>>(vertex_num);
-
-    for (int i = 0; i < vertex_num; i += 2)
-    {
-        Edge *in_out = new Edge(i + 1, 1);
-        // out에서 in으로는 간선이 없으므로 역방향의 용량은 0
-        Edge *out_in = new Edge(i, 0);
-
-        // 서로를 역방향 간선으로 저장
-        in_out->reverse = out_in;
-        out_in->reverse = in_out;
-
-        adj[i].push_back(in_out);
-        adj[i + 1].push_back(out_in);
-    }
-    string temp;
+    cin >> n >> m;
+    vector<string> v(n);
     pair<int, int> source_pos = {-1, -1}, sink_pos = {-1, -1};
-    for (int r = 0; r < row; ++r)
+    for (int i = 0; i < n; i++)
     {
-        cin >> temp;
-        for (int c = 0; c < column; ++c)
+        cin >> v[i];
+        for (int j = 0; j < m; j++)
         {
-            city_map[r][c] = temp[c];
-            if (city_map[r][c] == 'K')
-                source_pos = {r, c};
-            else if (city_map[r][c] == 'H')
-                sink_pos = {r, c};
+            if (v[i][j] == 'K')
+                source_pos = {i, j};
+            else if (v[i][j] == 'H')
+                sink_pos = {i, j};
         }
     }
 
@@ -147,53 +120,63 @@ int main()
         return 0;
     }
 
-    int r, c;
-    for (int i = 0; i < 4; ++i)
+    for (int i = 0; i < 4; i++)
     {
-        r = source_pos.first + change_pos[i][0];
-        c = source_pos.second + change_pos[i][1];
 
-        if (r == sink_pos.first && c == sink_pos.second)
+        int nx = source_pos.first + dx[i], ny = source_pos.second + dy[i];
+
+        if (nx < 0 || nx >= n || ny < 0 || ny >= m)
+            continue;
+        if (nx == sink_pos.first && ny == sink_pos.second)
         {
-            cout << "-1\n";
+            cout << "-1";
             return 0;
         }
     }
-
-    vector<vector<bool>> visited(row, vector<bool>(column, false));
-    int next_r, next_c;
-    for (int r = 0; r < row; ++r)
+    for (int i = 0; i < n * m * 2; i += 2)
     {
-        for (int c = 0; c < column; ++c)
+        Edge *e1 = new Edge(i + 1, 1);
+        Edge *e2 = new Edge(i, 0);
+        e1->rev = e2;
+        e2->rev = e1;
+        edges[i].push_back(e1);
+        edges[i + 1].push_back(e2);
+    }
+
+    vector<vector<bool>> visited(n, vector<bool>(m, false));
+    int next_r, next_c;
+    for (int r = 0; r < n; ++r)
+    {
+        for (int c = 0; c < m; ++c)
         {
-            if (city_map[r][c] == '#')
+            if (v[r][c] == '#')
                 continue;
             visited[r][c] = true;
 
-            int u_in = ((r * column) + c) * 2, u_out = u_in + 1;
+            int u_in = ((r * m) + c) * 2, u_out = u_in + 1;
             for (int i = 0; i < 4; ++i)
             {
                 next_r = r + dx[i];
                 next_c = c + dy[i];
 
                 // 범위 확인
-                if (next_r < 0 || row <= next_r || next_c < 0 || column <= next_c)
+                if (next_r < 0 || n <= next_r || next_c < 0 || m <= next_c)
                     continue;
 
-                if (city_map[next_r][next_c] == '#')
+                if (v[next_r][next_c] == '#')
                     continue;
 
                 if (!visited[next_r][next_c])
                 {
-                    int v_in = ((next_r * column) + next_c) * 2, v_out = v_in + 1;
+                    int v_in = ((next_r * m) + next_c) * 2, v_out = v_in + 1;
                     add_edge(u_in, u_out, v_in, v_out);
                 }
             }
         }
     }
 
-    int source_out = ((source_pos.first * column) + source_pos.second) * 2 + 1;
-    int sink_in = ((sink_pos.first * column) + sink_pos.second) * 2;
-    cout << MinimumCut(source_out, sink_in) << "\n";
+    source = (source_pos.first * m + source_pos.second) * 2 + 1;
+    sink = (sink_pos.first * m + sink_pos.second) * 2;
+    cout << mcmf() << "\n";
     return 0;
 }
