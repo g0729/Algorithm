@@ -1,3 +1,7 @@
+#pragma GCC optimize("O3")
+#pragma GCC optimize("Ofast")
+#pragma GCC optimize("unroll-loops")
+
 #include <bits/stdc++.h>
 using namespace std;
 #define ll long long
@@ -7,7 +11,7 @@ using namespace std;
 int dx[] = {1, -1, 0, 0};
 int dy[] = {0, 0, 1, -1};
 set<int> se[MAX];
-vector<int> lef(MAX, -1), righ(MAX, INF);
+vector<int> L(MAX, -1), R(MAX, INF);
 int main()
 {
     ios_base::sync_with_stdio(0);
@@ -17,26 +21,27 @@ int main()
     int n;
     cin >> n;
 
-    for (int i = 0; i < n; i++)
+    while (n--)
     {
         int a, b;
         cin >> a >> b;
         se[a].insert(b);
 
-        lef[a] = max(lef[a], b);
-        righ[b] = min(righ[b], a);
+        L[a] = max(L[a], b);
+        R[b] = min(R[b], a);
     }
 
     int q;
     cin >> q;
-    for (int i = 0; i < q; i++)
+
+    while (q--)
     {
         int a, b;
         cin >> a >> b;
 
         if (se[a].find(b) != se[a].end())
             cout << "1";
-        else if ((lef[a] != -1 && lef[a] >= b) && (righ[b] != -1 && righ[b] <= a))
+        else if ((L[a] >= b && R[b] <= a))
             cout << "2";
         else
             cout << "-1";
