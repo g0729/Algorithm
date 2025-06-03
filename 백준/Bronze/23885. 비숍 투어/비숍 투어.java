@@ -7,13 +7,15 @@ public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        int n = Integer.parseInt(st.nextToken()), m = Integer.parseInt(st.nextToken());
+        long n = Integer.parseInt(st.nextToken()), m = Integer.parseInt(st.nextToken());
         st = new StringTokenizer(br.readLine());
-        int a = Integer.parseInt(st.nextToken()), b = Integer.parseInt(st.nextToken());
+        long a = Integer.parseInt(st.nextToken()), b = Integer.parseInt(st.nextToken());
         st = new StringTokenizer(br.readLine());
-        int c = Integer.parseInt(st.nextToken()), d = Integer.parseInt(st.nextToken());
+        long c = Integer.parseInt(st.nextToken()), d = Integer.parseInt(st.nextToken());
 
-        if ((a + b) % 2 == (c + d) % 2)
+        if ((n == 1 || m == 1) && (a != c || b != d))
+            System.out.println("NO");
+        else if ((a + b) % 2 == (c + d) % 2)
             System.out.println("YES");
         else
             System.out.println("NO");
