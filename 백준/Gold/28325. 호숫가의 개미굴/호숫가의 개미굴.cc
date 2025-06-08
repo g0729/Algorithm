@@ -55,14 +55,18 @@ int main() {
         res += v[i];
     }
 
+    vector<ll> segment;
     for (ll i = 0; i < n; i++) {
         if (visited[i]) continue;
 
-        ll size = bfs(i, visited);
-
-        res += (size + 1) / 2;
+        segment.push_back(bfs(i, visited));
     }
 
+    if (segment.size() == 1 && segment[0] == n) {
+        res += segment[0] / 2;
+    } else {
+        for (auto a : segment) res += (a + 1) / 2;
+    }
     cout << res;
     return 0;
 }
