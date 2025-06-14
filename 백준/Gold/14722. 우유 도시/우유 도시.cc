@@ -26,9 +26,7 @@ int main() {
         for (int j = 1; j <= n; j++) {
             int cur = MAP[i][j];
             int prev = (cur + 2) % 3;
-            if (cur != 0 && dp[i - 1][j][prev] == 0 && dp[i][j - 1][prev] == 0)
-                dp[i][j][cur] = 0;
-            else
+            if (!(cur != 0 && dp[i - 1][j][prev] == 0 && dp[i][j - 1][prev] == 0))
                 dp[i][j][cur] = max(dp[i - 1][j][prev], dp[i][j - 1][prev]) + 1;
             for (int k = 0; k < 3; k++) {
                 if (cur == k) continue;
