@@ -24,7 +24,7 @@ for test_case in range(int(input())):
 
     print(f"Data Set {test_case+1}: ", end="")
 
-    for idx, cur in enumerate(bin(res)[2:][::-1]):
-        if cur == "1":
-            print(chr(idx + ord("A")), end=" ")
+    for i in range(n):
+        if (res >> i) & 1:
+            print(chr(i + ord("A")), end=" ")
     print("\n")
