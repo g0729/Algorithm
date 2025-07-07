@@ -13,15 +13,12 @@ def solve():
     for i in range(1, x):
         if v[i] - v[i - 1] == 1:
             cnt += 1
-            if cnt >= 4:
-                return "IMPOSSIBLE"
         else:
             point.append((cur, cnt))
             cur, cnt = v[i], 1
 
     point.append((cur, cnt))
 
-    cur = 0
     possible_landings = {0}
 
     for p_start, p_len in point:
@@ -33,7 +30,7 @@ def solve():
                 next_possible_landings.add(land_pos)
                 continue
 
-            for k in range(1, 4):  # 3가지 점프 유형
+            for k in range(1, 4):
                 jump_pos = p_last - (4 - k)
 
                 if land_pos <= jump_pos < p_start:
