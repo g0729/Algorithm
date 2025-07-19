@@ -34,6 +34,9 @@ int main() {
                 if (temp > res) res = temp;
             }
         }
+
+        cout << res;
+        return 0;
     }
 
     cout << res;
