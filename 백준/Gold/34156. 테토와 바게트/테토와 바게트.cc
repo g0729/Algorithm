@@ -24,16 +24,22 @@ int main() {
         return a.first < b.first;
     });
 
+    vector<pair<ll, ll>> useful;
+    ll max_end = -1;
+    for (auto &a : v) {
+        if (a.second > max_end) {
+            useful.push_back(a);
+            max_end = a.second;
+        }
+    }
     int res = 1;
 
-    ll end = v[0].second;
+    ll end = useful[0].second;
 
-    for (int i = 1; i < n; i++) {
-        if (end > v[i].first)
-            continue;
-        else {
+    for (int i = 1; i < useful.size(); i++) {
+        if ((end - 1) <= useful[i].first) {
             res++;
-            end = v[i].second;
+            end = useful[i].second;
         }
     }
 
