@@ -20,19 +20,12 @@ int main() {
 
     int res = 0;
     for (int i = 0; i < (1 << m); i++) {
-        int total_day = 0;
-        int total_page = 0;
-
-        int idx = 0;
-
-        int seq = i;
-
-        while (seq) {
-            if (seq & 1) {
-                total_day += v[idx].first;
-                total_page += v[idx].second;
+        int total_day = 0, total_page = 0;
+        for (int j = 0; j < m; j++) {
+            if (i & (1 << j)) {
+                total_day += v[j].first;
+                total_page += v[j].second;
             }
-            idx++, seq >>= 1;
         }
 
         if (total_day <= n) res = max(res, total_page);
