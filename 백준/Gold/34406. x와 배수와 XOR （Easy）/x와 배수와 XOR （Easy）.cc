@@ -23,12 +23,7 @@ int main() {
             continue;
         }
         cout << "2\n";
-        for (int i = x;; i++) {
-            if (((x * i) ^ (x * (i + 1))) == x) {
-                cout << i << " " << i + 1 << "\n";
-                break;
-            }
-        }
+        cout << (1 << 30) << " " << ((1 << 30) + 1) << "\n";
     }
     return 0;
 }
