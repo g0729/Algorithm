@@ -1,82 +1,63 @@
 #include <bits/stdc++.h>
 using namespace std;
+#define ll long long
+#define MOD 1000000007
+#define MAX 1000001
 #define INF 987654321
-#define lint long long
+int dx[] = {1, -1, 0, 0, -1, -1, 1, 1};
+int dy[] = {0, 0, 1, -1, -1, 1, -1, 1};
 
-lint n, m, k;
-vector<lint> v;
+int n, m, k;
+vector<ll> tree(4 * MAX);
+vector<ll> v(MAX);
 
-lint init(lint start, lint end, lint node, vector<lint> &tree)
-{
-	if (start == end)
-		return tree[node] = v[start];
+ll init(int start, int end, int node) {
+    if (start == end) return tree[node] = v[start];
 
-	lint mid = (start + end) / 2;
+    int mid = (start + end) / 2;
 
-	return tree[node] = init(start, mid, node * 2, tree) + init(mid + 1, end, node * 2 + 1, tree);
+    return tree[node] = init(start, mid, node * 2) + init(mid + 1, end, node * 2 + 1);
 }
 
-lint sum(lint start, lint end, lint node, lint left, lint right, vector<lint> &tree)
-{
-	if (left > end || right < start)
-		return 0;
+ll sum(int start, int end, int node, int left, int right) {
 
-	if (left <= start && end <= right)
-		return tree[node];
+    if (left > end || right < start) return 0;
+    if (left <= start && end <= right) return tree[node];
 
-	lint mid = (start + end) / 2;
+    int mid = (start + end) / 2;
 
-	return sum(start, mid, node * 2, left, right, tree) + sum(mid + 1, end, node * 2 + 1, left, right, tree);
+    return sum(start, mid, node * 2, left, right) + sum(mid + 1, end, node * 2 + 1, left, right);
 }
 
-void update(lint start, lint end, lint node, lint idx, lint dif, vector<lint> &tree)
-{
-	if (idx < start || idx > end)
-		return;
+ll update(int start, int end, int node, int idx, ll val) {
 
-	tree[node] += dif;
+    if (idx < start || idx > end) return tree[node];
 
-	if(start==end)
-	return;
-	lint mid = (start + end) / 2;
+    if (start == end) return tree[node] = val;
 
-	update(start, mid, node * 2, idx, dif, tree);
-	update(mid + 1, end, node * 2 + 1, idx, dif, tree);
+    int mid = (start + end) / 2;
+
+    return tree[node] = update(start, mid, node * 2, idx, val) + update(mid + 1, end, node * 2 + 1, idx, val);
 }
-int main()
-{
-	ios_base::sync_with_stdio(0);
-	cin.tie(0);
-	cout.tie(0);
+int main() {
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
 
-	cin >> n >> m >> k;
+    cin >> n >> m >> k;
 
-	for (lint i = 0; i < n; i++)
-	{
-		lint a;
-		cin >> a;
-		v.push_back(a);
-	}
+    for (int i = 1; i <= n; i++) cin >> v[i];
 
-	lint num = v.size();
-	vector<lint> tree(num * 4);
+    init(1, n, 1);
+    for (int i = 0; i < m + k; i++) {
+        ll a, b, c;
+        cin >> a >> b >> c;
 
-	init(0, num - 1, 1, tree);
-
-	for (lint i = 0; i < m + k; i++)
-	{
-		lint a, b, c;
-
-		cin >> a >> b >> c;
-
-		if (a == 1)
-		{
-			update(0, num - 1, 1, b-1, c - v[b - 1], tree);
-			v[b - 1] = c;
-		}
-		else
-			cout << sum(0, num - 1, 1, b-1, c-1, tree) << "\n";
-	}
-
-	return 0;
+        if (a == 1) {
+            update(1, n, 1, b, c);
+        } else if (a == 2) {
+            cout << sum(1, n, 1, b, c) << "\n";
+        }
+    }
+    return 0;
 }
