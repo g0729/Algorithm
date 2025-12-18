@@ -13,31 +13,26 @@ int main() {
     cout.tie(0);
 
     int n, m;
-    cin >> n >> m;
-    vector<vector<int>> dp(n, vector<int>(m));
     string a, b;
+    cin >> n >> m;
     cin >> a >> b;
 
+    vector<int> cur(n), prev(n);
+
     for (int i = 0; i < n; i++) {
-        if (a[i] == b[0]) dp[i][0] = 1;
+        if (a[i] == b[0]) prev[i] = 1;
     }
 
     for (int i = 1; i < m; i++) {
-        for (int j = 0; j < n; j++) {
-            int val = (a[j] == b[i] ? 1 : 0);
-            if (j == 0) {
-                dp[0][i] = dp[1][i - 1] + val;
-            } else if (j == n - 1) {
-                dp[n - 1][i] = dp[n - 2][i - 1] + val;
-            } else {
-                dp[j][i] = max(dp[j - 1][i - 1], dp[j + 1][i - 1]) + val;
-            }
+        cur[0] = prev[1] + (a[0] == b[i]);
+        cur[n - 1] = prev[n - 2] + (a[n - 1] == b[i]);
+        for (int j = 1; j < n - 1; j++) {
+            cur[j] = max(prev[j - 1], prev[j + 1]) + (a[j] == b[i]);
         }
+
+        prev = cur;
     }
 
-    int res = 0;
-    for (int i = 0; i < n; i++) res = max(res, dp[i][m - 1]);
-
-    cout << res;
+    cout << *max_element(prev.begin(), prev.end());
     return 0;
 }
