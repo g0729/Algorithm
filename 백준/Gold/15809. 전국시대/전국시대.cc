@@ -61,15 +61,9 @@ int main() {
         }
     }
 
-    set<int> se;
     vector<int> res;
     for (int i = 1; i <= n; i++) {
-        int x = find(i);
-        if (x == 0) continue;
-        if (se.find(x) != se.end()) continue;
-
-        se.insert(x);
-        res.push_back(cnt[x]);
+        if (parent[i] == i) res.push_back(cnt[i]);
     }
 
     sort(res.begin(), res.end());
