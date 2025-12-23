@@ -10,7 +10,6 @@ int n;
 int adj[MAX][MAX];
 int degree[MAX];
 int lastIdx[MAX];
-vector<int> paths;
 
 void findCircuit(int u) {
     for (int &v = lastIdx[u]; v <= n; v++) {
@@ -19,7 +18,7 @@ void findCircuit(int u) {
             findCircuit(v);
         }
     }
-    paths.push_back(u);
+    cout << u << " ";
 }
 int main() {
     ios_base::sync_with_stdio(0);
@@ -45,8 +44,5 @@ int main() {
 
     findCircuit(1);
 
-    for (int i = paths.size() - 1; i >= 0; i--) {
-        cout << paths[i] << " ";
-    }
     return 0;
 }
