@@ -8,7 +8,7 @@ def f(N :int):
     elif N>=60:
         return 'D'
     else:
-        return F
+        return "F"
 
 
 n=int(input())
