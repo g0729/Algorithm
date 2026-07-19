@@ -1,0 +1,1 @@
+print(sum([sum(map(lambda x : 1 if int(x)%5==0 else 0 ,input().split())) for _ in range(4)]))
